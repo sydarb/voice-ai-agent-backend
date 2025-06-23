@@ -17,7 +17,7 @@ from livekit.agents.voice import ModelSettings
 from livekit import rtc 
 from livekit.agents.llm.chat_context import ImageContent 
 
-from .memory import AgentMemoryManager
+# from .memory import AgentMemoryManager
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +37,7 @@ class VirtualAgent(Agent):
 
         agent_config = config['agent']
         memory_config = config['memory']
-        
+
         # Get instructions from the config for the Agent constructor
         super().__init__(
             instructions=agent_config['instructions'], 
@@ -56,10 +56,12 @@ class VirtualAgent(Agent):
         # Initialize memory handler using config if enabled
         self.memory_handler = None
         if memory_config['use']:
-            self.memory_handler = AgentMemoryManager(
-                participant_identity=self.participant_identity,
-                config=config 
-            )
+            # self.memory_handler = AgentMemoryManager(
+            #     participant_identity=self.participant_identity,
+            #     config=config 
+            # )
+            logger.error("!!!memory not implemented!!!")
+
         
         logger.info(f"ConversifyAgent initialized for identity: {self.participant_identity}. Memory: {'Enabled' if self.memory_handler else 'Disabled'}")
 
@@ -68,8 +70,9 @@ class VirtualAgent(Agent):
         logger.info(f"Agent '{self.participant_identity}' entering session.")
         if self.memory_handler:
             logger.info("Loading agent memory...")
-            await self.memory_handler.load_memory(self.update_chat_ctx)
-            logger.info("Agent memory loaded.")
+            # await self.memory_handler.load_memory(self.update_chat_ctx)
+            # logger.info("Agent memory loaded.")
+            logger.error("!!!memory not implemented!!!")
         
         await self.session.say(self.config['agent']['greeting'])
 

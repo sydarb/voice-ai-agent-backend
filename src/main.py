@@ -137,7 +137,12 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
     # dummy tool
     async def _get_weather_info(location: str) -> str:
         logger.info(f"!!! _get_weather_info called with: {location}")
-        return f"Its always sunny in {location}!"
+        if location.lower() == "hyderabad":
+            return f"Its always sunny in {location}!"
+        elif location.lower() == "london":
+            return f"Its currently raining in {location}!"
+        else:
+            return f"Its bad weather in {location}!"
 
     # Setup agent instance
     agent = VirtualAgent(
