@@ -1,0 +1,65 @@
+agent:
+  env_file: ".env.local"
+  instructions_file: src/prompts/system.txt
+  greeting: "Hey! How may I help you today?"
+  goodbye: "Goodbye! Have a great day!"
+  default_participant_identity: "identity-qfXx"
+  use_eou: false                                      # livekit turn detection
+  use_background_noise_removal: true                  # uses Krisp BVC noise cancellation. If self-hosting, set as false
+  use_background_audio: false                         # plays office background audio and keyboard typing sound while the agent speaks
+  allow_interruptions: True                           # reset tts on user iterruption
+
+stt:
+  use_local: false
+  aws_transcribe:
+    language: "en-US"  
+
+llm:
+  use_local: false
+  aws_bedrock:
+    model: "anthropic.claude-3-haiku-20240307-v1:0"   # "anthropic.claude-3-5-sonnet-20240620-v1:0"
+    temperature: 0.8
+  ollama:
+    base_url: "http://localhost:11434/v1" 
+    model: "qwen2.5vl:7b-q4_K_M"                 
+    temperature: 0.4                  
+    api_key: "NULL"                      
+    parallel_tool_calls: false
+    tool_choice: "auto"
+
+tts:
+  use_local: false
+  aws_polly:
+    voice: "Ruth"
+    speech_engine: "generative"
+    language: "en-US"   
+
+vad:
+  min_speech_duration: 0.20             # Minimum duration (seconds) for speech detection
+  min_silence_duration: 0.40            # Minimum silence duration (seconds) to detect end of speech
+  prefix_padding_duration: 0.5          # Padding duration (seconds) before detected speech
+  max_buffered_speech: 60.0             # Maximum duration (seconds) of buffered speech
+  activation_threshold: 0.5             # Threshold for voice activation detection
+  force_cpu: false                      # Force VAD to run on CPU instead of GPU
+  sample_rate: 16000  
+
+vision:
+  use: true                            
+  video_frame_interval: 0.2   
+
+memory:
+  use: false                             
+  dir: "data/memory_store"              
+  load_last_n: 6       
+
+embedding:
+  vllm_model_name: "mixedbread-ai/mxbai-embed-large-v1"                             
+
+worker:
+  job_memory_warn_mb: 10000              
+  load_threshold: 1.0                   
+  job_memory_limit_mb: 20000            
+
+logging:
+  level: "DEBUG"                         
+  file: "logs/app.log"                
