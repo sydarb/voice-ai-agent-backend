@@ -34,7 +34,7 @@ def prewarm(proc: agents.JobProcess, config: Dict[str, Any]):
     """Prewarms resources needed by the agent, VAD etc."""
     logger.info("Prewarming VAD...")    
     vad_config = config['vad']
-    
+
     proc.userdata["vad"] = silero.VAD.load(
         min_speech_duration=vad_config['min_speech_duration'],
         min_silence_duration=vad_config['min_silence_duration'],
@@ -70,7 +70,7 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
         try:
             llm_client = AsyncClient(api_key=llm_config['ollama']['api_key'], base_url=llm_config['ollama']['base_url'])
             logger.info(f"Initialized LLM Client at {llm_config['ollama']['base_url']}")
-        
+
         except Exception as e:
             logger.error(f"Failed to initialize LLM Client: {e}")
             raise
@@ -90,7 +90,7 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
     if not vad_instance:
         logger.error("VAD not found in process userdata. Exiting.")
         return
-    
+
     # Setup Speech-to-text and Text-to-speech
     transcribe_config = config['stt']['aws_transcribe']
     stt_instance = aws.STT(
@@ -120,7 +120,7 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
     # Start the video processing loop if configured
     video_task: asyncio.Task | None = None
     vision_config = config['vision']
-    
+
     if vision_config['use']:
         logger.info("Starting video processing loop...")
         video_task = asyncio.create_task(video_processing_loop(ctx, shared_state, vision_config['video_frame_interval']))
@@ -137,7 +137,8 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
     agent = VirtualAgent(
         participant_identity=participant.identity,
         shared_state=shared_state,
-        config=config
+        config=config,
+        room=ctx.room
     )
 
     # Register the shutdown callback 
@@ -185,7 +186,7 @@ def main():
     # Load configuration 
     app_config = ConfigManager().load_config()
     initial_logger.info("Configuration loaded.")
-    
+
     # Load env variables
     load_dotenv(app_config['agent']['env_file'])
 
@@ -195,7 +196,7 @@ def main():
     # Now, get the properly configured logger for the main module
     logger = logging.getLogger(__name__) # Re-get logger after setup
     logger.info("Centralized logging configured. Starting LiveKit Agent application...")
-    
+
     # Create a partial function that includes the config
     entrypoint_with_config = functools.partial(entrypoint, config=app_config)
     prewarm_with_config = functools.partial(prewarm, config=app_config)
