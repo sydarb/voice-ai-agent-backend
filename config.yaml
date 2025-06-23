@@ -13,6 +13,13 @@ stt:
   use_local: false
   aws_transcribe:
     language: "en-US"  
+  whisper:
+    language: "en"                      
+    model: "deepdml/faster-whisper-large-v3-turbo-ct2" 
+    device: "cuda"                     
+    compute_type: "float16"             
+    model_cache_directory: "/data/models_cache"  
+    warmup_audio: "data/warmup_audio.wav"  
 
 llm:
   use_local: false
