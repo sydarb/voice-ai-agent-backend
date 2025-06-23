@@ -9,7 +9,8 @@ from livekit.agents import (
     Agent,
     llm, 
     FunctionTool, 
-    ChatContext 
+    ChatContext,  
+    ChatMessage
 )
 from livekit.agents.llm import ChoiceDelta 
 from livekit.agents.voice import ModelSettings 
@@ -31,7 +32,8 @@ class VirtualAgent(Agent):
                  participant_identity: str,
                  shared_state: Dict[str, Any],
                  config: Dict[str, Any],
-                 room: rtc.Room) -> None: 
+                 room: rtc.Room,
+                 tools: list[FunctionTool]) -> None:
 
         agent_config = config['agent']
         memory_config = config['memory']
@@ -39,7 +41,8 @@ class VirtualAgent(Agent):
         # Get instructions from the config for the Agent constructor
         super().__init__(
             instructions=agent_config['instructions'], 
-            allow_interruptions=agent_config['allow_interruptions']
+            allow_interruptions=agent_config['allow_interruptions'],
+            tools=tools
         )
         self.room = room
 
@@ -85,8 +88,15 @@ class VirtualAgent(Agent):
         if not latest_image or not chat_ctx.items:
             return
         last_message = chat_ctx.items[-1]
-        if last_message.role != "user" or not last_message.content or not isinstance(last_message.content[0], str):
+
+        # Ensure the last message is a user message before processing
+        if not isinstance(last_message, ChatMessage) or last_message.role != "user":
+            logger.debug(f"Skipping image processing, last message is of type {type(last_message).__name__}")
             return
+
+        if not last_message.content or not isinstance(last_message.content[0], str):
+            return
+
         user_text = last_message.content[0]
         if any(keyword in user_text.lower() for keyword in self.vision_keywords):
             logger.info(f"Vision keyword found in '{user_text[:50]}...'. Adding image to context.")

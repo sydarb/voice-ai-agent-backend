@@ -15,6 +15,7 @@ from livekit.agents import (
     BackgroundAudioPlayer,
     AudioConfig,
     BuiltinAudioClip,
+    function_tool
 )
 from livekit.agents.types import NOT_GIVEN
 from livekit.plugins import aws, noise_cancellation, silero
@@ -133,12 +134,24 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
     participant = await ctx.wait_for_participant()
     logger.info(f"Participant '{participant.identity if participant else 'unknown'}' joined.")
 
+    # dummy tool
+    async def _get_weather_info(location: str) -> str:
+        logger.info(f"!!! _get_weather_info called with: {location}")
+        return f"Its always sunny in {location}!"
+
     # Setup agent instance
     agent = VirtualAgent(
         participant_identity=participant.identity,
         shared_state=shared_state,
         config=config,
-        room=ctx.room
+        room=ctx.room,
+        tools=[
+            function_tool(
+                _get_weather_info,
+                name="get_weather_info",
+                description="Get the weather in a specific location",
+            )
+        ],
     )
 
     # Register the shutdown callback 
