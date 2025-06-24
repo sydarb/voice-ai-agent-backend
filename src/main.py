@@ -2,6 +2,8 @@ import asyncio
 import logging
 import functools
 from typing import Dict, Any
+import os
+import json
 
 from dotenv import load_dotenv
 from openai import AsyncClient
@@ -146,6 +148,62 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
             return f"Its currently raining in {location}!"
         else:
             return f"Its bad weather in {location}!"
+        
+    async def _get_knowledge_bases():
+        """
+        get list of knowledge bases for available products and services
+        """
+        db_path = "./database/"
+        file_list = '\n'.join([f for f in os.listdir(db_path) if os.path.isfile(os.path.join(db_path, f))]).strip()
+        return f"Here is the list of knowledge bases avialable:\n{file_list}"
+
+    async def _get_product_service(knowledge_base: str = "laptop repair store"):
+        """
+        get list of products and services for a given knowledge base
+        """
+        db_path = f"./database/{knowledge_base}.json"
+        with open(db_path, "r") as f:
+            db = json.load(f)
+        product_service_list = ["\nProduct/service: {}".format(product_service) for product_service in db]
+        return f"Here is the list of products/service offered in knowledge base {knowledge_base}: {''.join(product_service_list).rstrip()}"
+
+    async def _get_issue(product_service: str, knowledge_base: str = "laptop repair store"):
+        """
+        get list of known problems if present for a given knowledge base and product/service
+        """
+        db_path = f"./database/{knowledge_base}.json"
+        with open(db_path, "r") as f:
+            db = json.load(f)
+        product_issue_list = ["\nIssue: {}".format(issue['issue']) for issue in db[product_service]]
+        return f"Here is the list of issues affecting {product_service} for which data is avialable: {''.join(product_issue_list).rstrip()}"
+        
+    async def _get_issue_solution(issue: str, product_service: str, knowledge_base: str = "laptop repair store"):
+        """
+        get the solution for a given product/service's issue from a given knowledge base
+        """
+        db_path = f"./database/{knowledge_base}.json"
+        with open(db_path, "r") as f:
+            db = json.load(f)
+
+        for kb_product_issue in db[product_service]:
+            if kb_product_issue['issue'].lower().strip() == issue.lower().strip():
+                return f"Here is a possible solution for the given issue:\n{kb_product_issue['solution']}"
+        return "Couldn't find solution in the stored knowledge base. I will have to use the web to search for a solution"
+
+    async def _get_possible_issue_cause(issue: str, product_service: str, knowledge_base: str = "laptop repair store"):
+        """
+        get a possible reason for the issue affecting given product/service
+        """
+        db_path = f"./database/{knowledge_base}.json"
+        with open(db_path, "r") as f:
+            db = json.load(f)
+
+        for kb_product_issue in db[product_service]:
+            if kb_product_issue['issue'].lower().strip() == issue.lower().strip():
+                return f"Here is a possible cause for the given issue:\n{kb_product_issue['potential_reason']}"
+        return "Couldn't find the issue in the stored knowledge base. I will have to use the web to search for a solution"
+
+
 
     async def _get_product_details(product_name: str) -> str:
         logger.info(f"!!! get_product_details called with: {product_name}")
@@ -178,16 +236,41 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
         config=config,
         room=ctx.room,
         tools=[
+            # function_tool(
+            #     _get_weather_info,
+            #     name="get_weather_info",
+            #     description="Get the weather in a specific location",
+            # ),
+            # function_tool(
+            #     _get_product_details,
+            #     name="get_product_details",
+            #     description="Get the details for all the products with the provided product name",
+            # ),
             function_tool(
-                _get_weather_info,
-                name="get_weather_info",
-                description="Get the weather in a specific location",
+                _get_knowledge_bases,
+                name="_get_knowledge_bases",
+                description="Get list of knowledge bases for available products and services",
             ),
             function_tool(
-                _get_product_details,
-                name="get_product_details",
-                description="Get the details for all the products with the provided product name",
-            )
+                _get_product_service,
+                name="_get_product_service",
+                description="Get the list of products and services available in a given knowledge base",
+            ),
+            function_tool(
+                _get_issue,
+                name="_get_issue",
+                description="Get the list of known problems if present for a given knowledge base and product/service",
+            ),
+            function_tool(
+                _get_issue_solution,
+                name="_get_issue_solution",
+                description="Get the solution for a given product/service issue from a given knowledge base",
+            ),
+            function_tool(
+                _get_possible_issue_cause,
+                name="_get_issue_solution",
+                description="Get a potential reason for the issue affecting the given product/service",
+            ),
         ],
     )
 

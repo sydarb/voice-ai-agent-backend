@@ -1,0 +1,62 @@
+{
+  "BILLY Bookcase": [
+    {
+      "issue": "Shelves are sagging or bowing.",
+      "potential_reason": "Overloading or improper assembly.",
+      "solution": "Redistribute the weight evenly across the shelves. Ensure the bookcase is properly assembled according to the instructions. If the issue persists, consider replacing the shelves or the entire unit."
+    },
+    {
+      "issue": "Bookcase is unstable or wobbly.",
+      "potential_reason": "Uneven floor or improper assembly.",
+      "solution": "Check if the floor is level and adjust the bookcase accordingly. Ensure all components are tightly secured and assembled correctly. Use wall anchors or braces for added stability if necessary."
+    }
+  ],
+  "MALM Bed Frame": [
+    {
+      "issue": "Squeaking or creaking noises.",
+      "potential_reason": "Loose connections or worn-out components.",
+      "solution": "Tighten all bolts and screws, especially those connecting the slats and side rails. Replace any worn-out components if necessary. Apply a small amount of lubricant to the joints."
+    },
+    {
+      "issue": "Bed frame is wobbly or unstable.",
+      "potential_reason": "Uneven floor or improper assembly.",
+      "solution": "Check if the floor is level and adjust the bed frame accordingly. Ensure all components are tightly secured and assembled correctly. Use wall anchors or braces for added stability if necessary."
+    }
+  ],
+  "EKTORP Sofa": [
+    {
+      "issue": "Cushions are losing shape or becoming lumpy.",
+      "potential_reason": "Normal wear and tear or improper maintenance.",
+      "solution": "Fluff and rotate the cushions regularly. Consider replacing the cushion inserts if they are severely deformed. Follow the care instructions for the specific fabric and filling material."
+    },
+    {
+      "issue": "Fabric is fading or discolored.",
+      "potential_reason": "Exposure to sunlight or improper cleaning.",
+      "solution": "Rotate the cushions and reposition the sofa periodically to minimize direct sunlight exposure. Use recommended cleaning methods and products for the specific fabric type."
+    }
+  ],
+  "LACK Side Table": [
+    {
+      "issue": "Table is wobbly or unstable.",
+      "potential_reason": "Uneven floor or improper assembly.",
+      "solution": "Check if the floor is level and adjust the table accordingly. Ensure all components are tightly secured and assembled correctly. Use felt pads or rubber feet to improve stability if necessary."
+    },
+    {
+      "issue": "Surface is scratched or damaged.",
+      "potential_reason": "Improper use or accidental impact.",
+      "solution": "Avoid placing hot or abrasive items directly on the surface. Use coasters and placemats to protect the table. For minor scratches, try using a furniture repair marker or touch-up kit."
+    }
+  ],
+  "KALLAX Shelving Unit": [
+    {
+      "issue": "Shelves are sagging or bowing.",
+      "potential_reason": "Overloading or improper assembly.",
+      "solution": "Redistribute the weight evenly across the shelves. Ensure the shelving unit is properly assembled according to the instructions. If the issue persists, consider replacing the shelves or the entire unit."
+    },
+    {
+      "issue": "Unit is unstable or wobbly.",
+      "potential_reason": "Uneven floor or improper assembly.",
+      "solution": "Check if the floor is level and adjust the shelving unit accordingly. Ensure all components are tightly secured and assembled correctly. Use wall anchors or braces for added stability if necessary."
+    }
+  ]
+}
