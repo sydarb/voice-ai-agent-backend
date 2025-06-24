@@ -1,0 +1,62 @@
+{
+  "Engine Oil": [
+    {
+      "issue": "Low oil level",
+      "potential_reason": "Oil leak or excessive oil consumption.",
+      "solution": "Check for leaks and repair if necessary. Top up the oil level and monitor for further drops. If the issue persists, consult a mechanic for further diagnosis."
+    },
+    {
+      "issue": "Contaminated oil",
+      "potential_reason": "Prolonged use or mixing of different oil types.",
+      "solution": "Drain the old oil and replace with fresh, recommended oil. Follow the manufacturer's guidelines for oil change intervals and types."
+    }
+  ],
+  "Air Filter": [
+    {
+      "issue": "Clogged air filter",
+      "potential_reason": "Accumulation of dirt, dust, and debris over time.",
+      "solution": "Replace the air filter according to the manufacturer's recommended intervals. Inspect the air filter regularly and replace it if excessively dirty."
+    },
+    {
+      "issue": "Damaged air filter",
+      "potential_reason": "Physical damage or improper installation.",
+      "solution": "Inspect the air filter for any tears or damage. Replace it with a new, compatible filter and ensure proper installation."
+    }
+  ],
+  "Brake Pads": [
+    {
+      "issue": "Worn brake pads",
+      "potential_reason": "Normal wear and tear due to friction during braking.",
+      "solution": "Inspect the brake pads for wear indicators. Replace the brake pads when they reach the minimum recommended thickness. Follow the manufacturer's guidelines for brake pad replacement intervals."
+    },
+    {
+      "issue": "Squeaking or grinding noise",
+      "potential_reason": "Worn brake pads or damaged brake components.",
+      "solution": "Inspect the brake pads and related components for wear or damage. Replace the affected parts as necessary. Ensure proper brake system adjustment and lubrication."
+    }
+  ],
+  "Battery": [
+    {
+      "issue": "Battery not holding charge",
+      "potential_reason": "Aged battery or electrical system issues.",
+      "solution": "Test the battery's charge and condition. Replace the battery if it fails the test or has reached its expected lifespan. Check for any electrical system issues that may be draining the battery."
+    },
+    {
+      "issue": "Corroded battery terminals",
+      "potential_reason": "Exposure to moisture or acidic fumes.",
+      "solution": "Clean the battery terminals using a wire brush or baking soda solution. Ensure proper cable connections and apply a terminal protector after cleaning."
+    }
+  ],
+  "Tires": [
+    {
+      "issue": "Uneven tire wear",
+      "potential_reason": "Improper tire pressure, misalignment, or suspension issues.",
+      "solution": "Check and adjust the tire pressure to the recommended levels. Inspect the suspension components and have the vehicle aligned if necessary. Rotate the tires according to the manufacturer's recommendations."
+    },
+    {
+      "issue": "Tire puncture or damage",
+      "potential_reason": "Road hazards or excessive wear.",
+      "solution": "Inspect the tire for any punctures or visible damage. Repair or replace the tire as needed, following the manufacturer's guidelines for tire replacement."
+    }
+  ]
+}
