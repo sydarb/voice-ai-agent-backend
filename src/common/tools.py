@@ -1,5 +1,6 @@
 import time
 import logging
+from typing import Optional
 from functools import wraps
 
 
@@ -61,4 +62,39 @@ async def get_product_details(shared_state: dict, product_name: str) -> str:
         
         else:
             return "Could not find details for the requested products."
+        
+@log_tool_call
+async def auth_user(first: str, last: Optional[str] = None) -> bool:
+    """
+    Authenticates a user based on their first name and optional last name.
+
+    Args:
+        first (str): The user's first name.
+        last (str, optional): The user's last name. Defaults to None.
+
+    Returns:
+        bool: True if the user is found in the dummy database, False otherwise.
+    """
+    # Dummy customer database
+    customer_database = [
+        {"first_name": "Ved", "last_name": "Abhyankar"},
+        {"first_name": "Syed", "last_name": "Ahmad"},
+        {"first_name": "John", "last_name": "Nolan"},
+        {"first_name": "Alice", "last_name": None},
+    ]
+
+    logger.info(f"Attempting to authenticate user: {first} {last if last else ''}")
+
+    first_normalized = first.lower()
+
+    for customer in customer_database:
+        if customer["first_name"].lower() == first_normalized:
+            if last:
+                if customer["last_name"] and customer["last_name"].lower() == last.lower():
+                    return True
+            else:
+                return True
+
+    logger.info(f"Authentication failed for user: {first} {last if last else ''}")
+    return False
         

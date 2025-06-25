@@ -27,7 +27,8 @@ from core.agent import VirtualAgent
 from core.callbacks import metrics_callback, shutdown_callback
 from core.vision import video_processing_loop
 from common.tools import (
-    get_product_details
+    get_product_details,
+    auth_user
 )
 from utils.config import ConfigManager
 from utils.logger import setup_logging
@@ -259,6 +260,11 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
                 _select_item,
                 name="select_item",
                 description="Selects an item from a list by its 1-based index. Use this when the user says 'choose the first option', 'select number 2', 'select the 4th option' etc.",
+            ),
+            function_tool(
+                auth_user,
+                name="auth_user",
+                description="This tool takes the user's first name (and optionally, their last name) as input and returns a boolean value indicating whether the user is a registered customer."
             ),
             # function_tool(
             #     _get_knowledge_bases,

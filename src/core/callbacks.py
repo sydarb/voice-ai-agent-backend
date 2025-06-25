@@ -43,7 +43,7 @@ def metrics_callback(session: AgentSession):
             tts_ttfb = 0
 
 
-async def shutdown_callback(agent: VirtualAgent, video_task: asyncio.Task | None):
+async def shutdown_callback(agent: VirtualAgent | None, video_task: asyncio.Task | None):
     """Handles graceful shutdown logic: cancels tasks, logs usage, saves memory."""
     logger.info("Application shutdown initiated")
     
@@ -64,7 +64,7 @@ async def shutdown_callback(agent: VirtualAgent, video_task: asyncio.Task | None
     logger.info(f"Usage Summary: {summary}")
 
     # Save conversation history if available
-    if agent.memory_handler:
+    if agent and agent.memory_handler:
         try:
             logger.info("Saving conversation memory...")
             if not hasattr(agent, 'chat_ctx') or agent.chat_ctx is None:

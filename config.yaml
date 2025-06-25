@@ -1,13 +1,23 @@
 agent:
   env_file: ".env.local"
   instructions_file: src/prompts/system.txt
-  greeting: "Hey! How may I help you today?"
+  greeting: "Hello! Welcome to Furlenco. My name is Sasha and I'm here to assist you. For a personalized experience can I please have your first name?"
   goodbye: "Goodbye! Have a great day!"
   default_participant_identity: "identity-qfXx"
   use_eou: false                                      # livekit turn detection
   use_background_noise_removal: true                  # uses Krisp BVC noise cancellation. If self-hosting, set as false
   use_background_audio: false                         # plays office background audio and keyboard typing sound while the agent speaks
   allow_interruptions: True                           # reset tts on user iterruption
+  triage:
+    instructions_file: src/prompts/triage_system_prompt.txt
+    greeting: "Hello! Welcome to Furlenco. My name is Sasha and I'm here to assist you. For a personalized experience can I please have your first name?"
+    voice: "Ruth"
+  sales:
+    instructions_file: src/prompts/sales_system_prompt.txt
+    voice: "Danielle"
+  service:
+    instructions_file: src/prompts/service_system_prompt.txt
+    voice: "Kajal"
 
 stt:
   use_local: false
@@ -37,7 +47,7 @@ llm:
 tts:
   use_local: false
   aws_polly:
-    voice: "Ruth"
+    voice: "Danielle"
     speech_engine: "generative"
     language: "en-US"   
 

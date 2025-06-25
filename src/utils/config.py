@@ -65,6 +65,11 @@ class ConfigManager:
         agent_cfg = self.config['agent']
         prompt_file = agent_cfg['instructions_file']
         agent_cfg['instructions'] = self._load_prompt(prompt_file)
+
+        for agent_name in ['triage', 'sales', 'service']:
+            agent_cfg = self.config['agent'][agent_name]
+            prompt_file = agent_cfg['instructions_file']
+            agent_cfg['instructions'] = self._load_prompt(prompt_file)
         
         # Resolve memory directory
         memory_cfg = self.config['memory']
