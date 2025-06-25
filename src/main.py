@@ -268,7 +268,7 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
             ),
             function_tool(
                 _get_possible_issue_cause,
-                name="_get_issue_solution",
+                name="_get_possible_issue_cause",
                 description="Get a potential reason for the issue affecting the given product/service",
             ),
         ],
