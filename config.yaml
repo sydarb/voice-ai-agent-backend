@@ -17,7 +17,7 @@ agent:
     voice: "Danielle"
   service:
     instructions_file: src/prompts/service_system_prompt.txt
-    voice: "Kajal"
+    voice: "Joanna"
 
 stt:
   use_local: false
