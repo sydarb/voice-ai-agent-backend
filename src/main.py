@@ -184,8 +184,14 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
             db = json.load(f)
 
         product_service_clean = product_service
-        if product_service not in db:
+        if product_service in db:
+            product_service_clean = product_service
+        elif product_service.lower() in db:
             product_service_clean = product_service.lower()
+        elif product_service.upper() in db:
+            product_service_clean = product_service.upper()
+        elif product_service.capitalize() in db:
+            product_service_clean = product_service.capitalize()
 
         product_issue_list = ["{}) Issue: {} ".format(i, issue['issue']) for i, issue in enumerate(db[product_service_clean])]
         return f"Here is the list of issues affecting {product_service_clean} for which data is avialable: {''.join(product_issue_list).rstrip()}"
@@ -194,17 +200,23 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
         """
         get the solution for a given product/service's issue from a given knowledge base
         """
-        with open(db_path, "r") as f:
-            db = json.load(f)
         knowledge_base_clean = knowledge_base
         if ".json" in knowledge_base:
             knowledge_base_clean = knowledge_base.replace(".json", "")
         db_path = f"./database/{knowledge_base_clean}.json"
+        with open(db_path, "r") as f:
+            db = json.load(f)
         logger.info(f"db: {db}, product_service: {product_service}")
         
         product_service_clean = product_service
-        if product_service not in db:
+        if product_service in db:
+            product_service_clean = product_service
+        elif product_service.lower() in db:
             product_service_clean = product_service.lower()
+        elif product_service.upper() in db:
+            product_service_clean = product_service.upper()
+        elif product_service.capitalize() in db:
+            product_service_clean = product_service.capitalize()
         for kb_product_issue in db[product_service_clean]:
             if kb_product_issue['issue'].lower().strip() == issue.lower().strip():
                 solutions = [pi+'\n'for pi in kb_product_issue['solution']]
@@ -222,9 +234,16 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
         with open(db_path, "r") as f:
             db = json.load(f)
 
-        if product_service.lower() in db:
-            product_service = product_service.lower()
-        for kb_product_issue in db[product_service]:
+        product_service_clean = product_service
+        if product_service in db:
+            product_service_clean = product_service
+        elif product_service.lower() in db:
+            product_service_clean = product_service.lower()
+        elif product_service.upper() in db:
+            product_service_clean = product_service.upper()
+        elif product_service.capitalize() in db:
+            product_service_clean = product_service.capitalize()
+        for kb_product_issue in db[product_service_clean]:
             if kb_product_issue['issue'].lower().strip() == issue.lower().strip():
                 return f"Here is a possible cause for the given issue:\n{kb_product_issue['potential_reason']}"
         return "Couldn't find the issue in the stored knowledge base. I will have to use the web to search for a solution"
@@ -241,26 +260,32 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
             db = json.load(f)
 
         product_service_clean = product_service
-        if product_service not in db:
+        if product_service in db:
+            product_service_clean = product_service
+        elif product_service.lower() in db:
             product_service_clean = product_service.lower()
+        elif product_service.upper() in db:
+            product_service_clean = product_service.upper()
+        elif product_service.capitalize() in db:
+            product_service_clean = product_service.capitalize()
         for kb_product_issue in db[product_service_clean]:
             if kb_product_issue['issue'].lower().strip() == issue.lower().strip():
                 return f"It will take around {kb_product_issue['repair_cost']} and {kb_product_issue['repair_time']} to solve the issue. Is that ok?\n"
         return "Couldn't find the required data. I will have to use the web to search for a solution"
     
 
-    async def _check_open_slots():
+    async def _check_open_appointment_slots():
         """
-        access stored calendar and check open slots
+        access stored calendar and check open slots for appointment
         """
         with open("./calendar.json", "r") as f:
-            open_dates = '\n'.join([k for k, v in json.load(f).items() if v['blocked'] == 'false'])
+            open_dates = '\n'.join([k for k, v in json.load(f).items() if not v['blocked']])
         
         if open_dates:
             return f"These are the available dates to book an appointment: {open_dates}"
         return "Sorry! no dates available"
 
-    async def _check_date_availability_and_book(open_dates: list[str], user_date: str) -> str:
+    async def _check_user_date_availability_and_book(open_appointment_dates: list[str], user_date: str) -> str:
         """
         Check if a user's preferred date is available.
         
@@ -279,7 +304,7 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
         
         # Parse user date
         try:
-            if user_date in open_dates:
+            if user_date in open_appointment_dates:
                 return f"✅ {calendar_data[user_date]['formatted']} is available! Booking an appointment..."
             else:
                 return f"❌ {calendar_data[user_date]['formatted']} is blocked. Please choose an available date"
@@ -361,13 +386,13 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
                 description="Get the approximate time and money required to solve the issue",
             ),
             function_tool(
-                _check_open_slots,
-                name="_check_open_slots",
+                _check_open_appointment_slots,
+                name="_check_open_appointment_slots",
                 description="Get the list of open dates available to book an appointment",
             ),
             function_tool(
-                _check_date_availability_and_book,
-                name="_check_date_availability_and_book",
+                _check_user_date_availability_and_book,
+                name="_check_user_date_availability_and_book",
                  description="Book an appointment after checking for customer date availability",
             )
         ],
