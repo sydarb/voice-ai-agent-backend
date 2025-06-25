@@ -26,7 +26,9 @@ from livekit.plugins.turn_detector.multilingual import MultilingualModel
 from core.agent import VirtualAgent
 from core.callbacks import metrics_callback, shutdown_callback
 from core.vision import video_processing_loop
-from engine.llm import OpenaiLLM
+from common.tools import (
+    get_product_details
+)
 from utils.config import ConfigManager
 from utils.logger import setup_logging
 
@@ -74,24 +76,11 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
 
     # Initialize LLM Client using config
     llm_config = config['llm']
-    if llm_config['use_local']:
-        try:
-            llm_client = AsyncClient(api_key=llm_config['ollama']['api_key'], base_url=llm_config['ollama']['base_url'])
-            logger.info(f"Initialized LLM Client at {llm_config['ollama']['base_url']}")
-
-        except Exception as e:
-            logger.error(f"Failed to initialize LLM Client: {e}")
-            raise
-
-        llm_instance = OpenaiLLM(client=llm_client, config=llm_config)
-        logger.info(f"Created an OpenAI LLM instance.")
-
-    else:
-        llm_instance = aws.LLM(
-            model=llm_config['aws_bedrock']['model'],
-            temperature=llm_config['aws_bedrock']['temperature']
-        )
-        logger.info(f"Created an AWS Bedrock LLM instance.")
+    llm_instance = aws.LLM(
+        model=llm_config['aws_bedrock']['model'],
+        temperature=llm_config['aws_bedrock']['temperature']
+    )
+    logger.info(f"Created an AWS Bedrock LLM instance.")
 
     # Check if VAD was prewarmed successfully
     vad_instance = ctx.proc.userdata.get("vad")
@@ -207,30 +196,33 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
 
 
 
-    async def _get_product_details(product_name: str) -> str:
-        logger.info(f"!!! get_product_details called with: {product_name}")
-        # Dummy product data
-        all_products = {
-            "Product 1": {"title": "Product 1", "description": "This is a great product you should buy.", "imageUrl": "https://via.placeholder.com/250x150?text=Product+1", "actionUrl": "https://example.com/product1"},
-            "Product 2": {"title": "Product 2", "description": "This is another great product.", "imageUrl": "https://via.placeholder.com/250x150?text=Product+2", "actionUrl": "https://example.com/product2"},
-            "Service A": {"title": "Service A", "description": "Our best service offering.", "imageUrl": "https://via.placeholder.com/250x150?text=Service+A", "actionUrl": "https://example.com/serviceA"},
-        }
+    # async def _get_product_details(product_name: str) -> str:
+    #     logger.info(f"!!! get_product_details called with: {product_name}")
+    #     # Dummy product data
+    #     all_products = {
+    #         "Product 1": {"title": "Product 1", "description": "This is a great product you should buy.", "imageUrl": "https://via.placeholder.com/250x150?text=Product+1", "actionUrl": "https://example.com/product1"},
+    #         "Product 2": {"title": "Product 2", "description": "This is another great product.", "imageUrl": "https://via.placeholder.com/250x150?text=Product+2", "actionUrl": "https://example.com/product2"},
+    #         "Service A": {"title": "Service A", "description": "Our best service offering.", "imageUrl": "https://via.placeholder.com/250x150?text=Service+A", "actionUrl": "https://example.com/serviceA"},
+    #     }
         
-        product_details = list(all_products.values())
+    #     product_details = list(all_products.values())
 
-        if product_details:
-            # Update options data in shared_state
-            shared_state["options"] = {
-                "type": "carousel",
-                "items": product_details
-            }
-            shared_state["display_options"] = True
+    #     if product_details:
+    #         # Update options data in shared_state
+    #         shared_state["options"] = {
+    #             "type": "carousel",
+    #             "items": product_details
+    #         }
+    #         shared_state["display_options"] = True
             
-            return f"Successfully fetched details for the requested products and displayed to the user. "\
-                "Do not generate nay response, only just ask to 'choose any one from the provided options'"
+    #         return f"Successfully fetched details for the requested products and displayed to the user. "\
+    #             "Do not generate nay response, only just ask to 'choose any one from the provided options'"
         
-        else:
-            return "Could not find details for the requested products."
+    #     else:
+    #         return "Could not find details for the requested products."
+
+    async def _get_product_details_wrapper(product_name: str) -> str:
+        return await get_product_details(shared_state, product_name)
         
 
     async def _select_item(index: int):
@@ -259,7 +251,7 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
                 description="Get the weather in a specific location",
             ),
             function_tool(
-                _get_product_details,
+                _get_product_details_wrapper,
                 name="get_product_details",
                 description="Get the details for all the products with the provided product name",
             ),

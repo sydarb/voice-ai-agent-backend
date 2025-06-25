@@ -42,8 +42,8 @@ tts:
     language: "en-US"   
 
 vad:
-  min_speech_duration: 0.20             # Minimum duration (seconds) for speech detection
-  min_silence_duration: 0.40            # Minimum silence duration (seconds) to detect end of speech
+  min_speech_duration: 0.50             # Minimum duration (seconds) for speech detection
+  min_silence_duration: 1.50            # Minimum silence duration (seconds) to detect end of speech
   prefix_padding_duration: 0.5          # Padding duration (seconds) before detected speech
   max_buffered_speech: 60.0             # Maximum duration (seconds) of buffered speech
   activation_threshold: 0.5             # Threshold for voice activation detection
