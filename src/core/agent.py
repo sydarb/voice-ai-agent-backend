@@ -149,7 +149,7 @@ class VirtualAgent(Agent):
                 if isinstance(msg, ChatMessage) and msg.role == 'assistant' and isinstance(msg.content[0], str):
                     try:
                         data = json.loads(msg.content[0])
-                        if isinstance(data, dict) and 'spokenResponse' in data and ('ui' in data or 'ui-action' in data):
+                        if isinstance(data, dict) and 'spokenResponse' in data and ('ui' in data or 'ui_actions' in data):
                             logger.debug("Composite message found. Removing the ui content from context.")
                             msg.content[0] = data['spokenResponse']
                     except (json.JSONDecodeError, TypeError):
@@ -164,17 +164,42 @@ class VirtualAgent(Agent):
         llm_stream = super().llm_node(chat_ctx, tools, model_settings)
         buffered_chunks = [chunk async for chunk in llm_stream]
 
-        if self.shared_state.get('display_options', False):
+        if self.shared_state.get('select_option', False):
+            logger.info("select_option is True. Constructing message to select a card.")
+            
+            full_response = "".join(
+                [chunk.delta.content for chunk in buffered_chunks if chunk.delta and chunk.delta.content]
+            )
+            logger.debug(f"LLM Response: {full_response}")
+            selection_index = self.shared_state['selected_option'] or 0
+            composite_message = {
+                "spokenResponse": full_response.lstrip("\n"),
+                "ui_actions": {
+                    "type": "ui_action",
+                    "action": "select_item",
+                    "payload": {
+                        "index": selection_index
+                    }
+                }
+            }
+            choice_delta = ChoiceDelta(content=json.dumps(composite_message))
+            
+            self.shared_state['selected_option'] = None
+            self.shared_state['select_option'] = False
+            
+            yield llm.ChatChunk(id=str(uuid.uuid4()), delta=choice_delta)
+
+        elif self.shared_state.get('display_options', False):
             logger.info("display_options is True. Constructing composite message with carousel.")
             
             full_response = "".join(
                 [chunk.delta.content for chunk in buffered_chunks if chunk.delta and chunk.delta.content]
             )
-            logger.debug(f"--> full_reposne: {full_response}")
+            logger.debug(f"LLM Response: {full_response}")
 
             options = self.shared_state.get('options', {})
             composite_message = {
-                "spokenResponse": full_response,
+                "spokenResponse": full_response.lstrip("\n"),
                 "ui": options
             }
             choice_delta = ChoiceDelta(content=json.dumps(composite_message))
@@ -183,6 +208,7 @@ class VirtualAgent(Agent):
             self.shared_state['options'] = {}
 
             yield llm.ChatChunk(id=str(uuid.uuid4()), delta=choice_delta)
+        
         else:
             for chunk in buffered_chunks:
                 yield chunk
@@ -202,7 +228,7 @@ class VirtualAgent(Agent):
 
         try:
             parsed_data = json.loads(full_text)
-            if 'spokenResponse' in parsed_data and 'ui' in parsed_data:
+            if 'spokenResponse' in parsed_data and ('ui' in parsed_data or 'ui_actions' in parsed_data):
                 text_to_speak = parsed_data['spokenResponse']
                 logger.info("Composite message received. Speaking only the 'spokenResponse' part.")
         except (json.JSONDecodeError, TypeError):

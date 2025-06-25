@@ -67,7 +67,9 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
     # Create shared state dictionary for inter-task communication
     shared_state: Dict[str, Any] = {
         "options": {},
+        "selected_option": None,
         "display_options": False,
+        "select_option": False
     }
 
     # Initialize LLM Client using config
@@ -224,10 +226,25 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
             }
             shared_state["display_options"] = True
             
-            return f"Successfully fetched details for the requested products and displayed to the user. Do not generate a response to this, just ask to 'choose any from the below options'"
+            return f"Successfully fetched details for the requested products and displayed to the user. "\
+                "Do not generate nay response, only just ask to 'choose any one from the provided options'"
         
         else:
             return "Could not find details for the requested products."
+        
+
+    async def _select_item(index: int):
+        logger.info(f"!!! select_item called with: {index}")
+
+        if not isinstance(index, int) or index <= 0:
+            return "Please provide a valid choice (starting from 1)."
+    
+        zero_based_index = index - 1
+        shared_state["selected_option"] = zero_based_index
+        shared_state["select_option"] = True
+    
+        return f"Selected option number {index}."
+ 
 
     # Setup agent instance
     agent = VirtualAgent(
@@ -236,41 +253,46 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
         config=config,
         room=ctx.room,
         tools=[
+            function_tool(
+                _get_weather_info,
+                name="get_weather_info",
+                description="Get the weather in a specific location",
+            ),
+            function_tool(
+                _get_product_details,
+                name="get_product_details",
+                description="Get the details for all the products with the provided product name",
+            ),
+            function_tool(
+                _select_item,
+                name="select_item",
+                description="Selects an item from a list by its 1-based index. Use this when the user says 'choose the first option', 'select number 2', 'select the 4th option' etc.",
+            ),
             # function_tool(
-            #     _get_weather_info,
-            #     name="get_weather_info",
-            #     description="Get the weather in a specific location",
+            #     _get_knowledge_bases,
+            #     name="_get_knowledge_bases",
+            #     description="Get list of knowledge bases for available products and services",
             # ),
             # function_tool(
-            #     _get_product_details,
-            #     name="get_product_details",
-            #     description="Get the details for all the products with the provided product name",
+            #     _get_product_service,
+            #     name="_get_product_service",
+            #     description="Get the list of products and services available in a given knowledge base",
             # ),
-            function_tool(
-                _get_knowledge_bases,
-                name="_get_knowledge_bases",
-                description="Get list of knowledge bases for available products and services",
-            ),
-            function_tool(
-                _get_product_service,
-                name="_get_product_service",
-                description="Get the list of products and services available in a given knowledge base",
-            ),
-            function_tool(
-                _get_issue,
-                name="_get_issue",
-                description="Get the list of known problems if present for a given knowledge base and product/service",
-            ),
-            function_tool(
-                _get_issue_solution,
-                name="_get_issue_solution",
-                description="Get the solution for a given product/service issue from a given knowledge base",
-            ),
-            function_tool(
-                _get_possible_issue_cause,
-                name="_get_possible_issue_cause",
-                description="Get a potential reason for the issue affecting the given product/service",
-            ),
+            # function_tool(
+            #     _get_issue,
+            #     name="_get_issue",
+            #     description="Get the list of known problems if present for a given knowledge base and product/service",
+            # ),
+            # function_tool(
+            #     _get_issue_solution,
+            #     name="_get_issue_solution",
+            #     description="Get the solution for a given product/service issue from a given knowledge base",
+            # ),
+            # function_tool(
+            #     _get_possible_issue_cause,
+            #     name="_get_possible_issue_cause",
+            #     description="Get a potential reason for the issue affecting the given product/service",
+            # ),
         ],
     )
 
