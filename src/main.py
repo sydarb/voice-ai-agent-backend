@@ -63,7 +63,10 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
     logger.info("Successfully connected to room.")
 
     # Create shared state dictionary for inter-task communication
-    shared_state: Dict[str, Any] = {}
+    shared_state: Dict[str, Any] = {
+        "options": {},
+        "display_options": False,
+    }
 
     # Initialize LLM Client using config
     llm_config = config['llm']
@@ -144,6 +147,30 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
         else:
             return f"Its bad weather in {location}!"
 
+    async def _get_product_details(product_name: str) -> str:
+        logger.info(f"!!! get_product_details called with: {product_name}")
+        # Dummy product data
+        all_products = {
+            "Product 1": {"title": "Product 1", "description": "This is a great product you should buy.", "imageUrl": "https://via.placeholder.com/250x150?text=Product+1", "actionUrl": "https://example.com/product1"},
+            "Product 2": {"title": "Product 2", "description": "This is another great product.", "imageUrl": "https://via.placeholder.com/250x150?text=Product+2", "actionUrl": "https://example.com/product2"},
+            "Service A": {"title": "Service A", "description": "Our best service offering.", "imageUrl": "https://via.placeholder.com/250x150?text=Service+A", "actionUrl": "https://example.com/serviceA"},
+        }
+        
+        product_details = list(all_products.values())
+
+        if product_details:
+            # Update options data in shared_state
+            shared_state["options"] = {
+                "type": "carousel",
+                "items": product_details
+            }
+            shared_state["display_options"] = True
+            
+            return f"Successfully fetched details for the requested products and displayed to the user. Do not generate a response to this, just ask to 'choose any from the below options'"
+        
+        else:
+            return "Could not find details for the requested products."
+
     # Setup agent instance
     agent = VirtualAgent(
         participant_identity=participant.identity,
@@ -155,6 +182,11 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
                 _get_weather_info,
                 name="get_weather_info",
                 description="Get the weather in a specific location",
+            ),
+            function_tool(
+                _get_product_details,
+                name="get_product_details",
+                description="Get the details for all the products with the provided product name",
             )
         ],
     )
