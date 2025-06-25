@@ -4,6 +4,7 @@ import functools
 from typing import Dict, Any
 import os
 import json
+import datetime
 
 from dotenv import load_dotenv
 from openai import AsyncClient
@@ -174,7 +175,7 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
         db_path = f"./database/{knowledge_base}.json"
         with open(db_path, "r") as f:
             db = json.load(f)
-        product_issue_list = ["\nIssue: {}".format(issue['issue']) for issue in db[product_service]]
+        product_issue_list = ["{}) Issue: {} ".format(i, issue['issue']) for i, issue in enumerate(db[product_service])]
         return f"Here is the list of issues affecting {product_service} for which data is avialable: {''.join(product_issue_list).rstrip()}"
         
     async def _get_issue_solution(issue: str, product_service: str, knowledge_base: str = "laptop repair store"):
@@ -184,10 +185,11 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
         db_path = f"./database/{knowledge_base}.json"
         with open(db_path, "r") as f:
             db = json.load(f)
-
+        logger.info(f"db: {db}, product_service: {product_service}")
         for kb_product_issue in db[product_service]:
             if kb_product_issue['issue'].lower().strip() == issue.lower().strip():
-                return f"Here is a possible solution for the given issue:\n{kb_product_issue['solution']}"
+                solutions = [pi+'\n'for pi in kb_product_issue['solution']]
+                return f"Here is a step-wise solution for the given issue:\n{'-> '.join(solutions).strip()}"
         return "Couldn't find solution in the stored knowledge base. I will have to use the web to search for a solution"
 
     async def _get_possible_issue_cause(issue: str, product_service: str, knowledge_base: str = "laptop repair store"):
@@ -202,6 +204,56 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
             if kb_product_issue['issue'].lower().strip() == issue.lower().strip():
                 return f"Here is a possible cause for the given issue:\n{kb_product_issue['potential_reason']}"
         return "Couldn't find the issue in the stored knowledge base. I will have to use the web to search for a solution"
+    
+    async def _get_cost_and_time(issue: str, product_service: str, knowledge_base: str = "laptop repair store"):
+        """
+        get the approximate time and money required to solve the issue
+        """
+        db_path = f"./database/{knowledge_base}.json"
+        with open(db_path, "r") as f:
+            db = json.load(f)
+
+        for kb_product_issue in db[product_service]:
+            if kb_product_issue['issue'].lower().strip() == issue.lower().strip():
+                return f"It will take around {kb_product_issue['repair_cost']} and {kb_product_issue['repair_time']} to solve the issue. Is that ok?\n"
+        return "Couldn't find the required data. I will have to use the web to search for a solution"
+    
+
+    async def _check_date_availability(user_date: str) -> str:
+        """
+        Check if a user's preferred date is available.
+        
+        Args:
+            user_date: Date in format 'YYYY-MM-DD' or 'MM-DD' or natural format
+            
+        Returns:
+            str: Availability status message
+        """
+        try:
+            with open('calendar.json', 'r') as f:
+                calendar_data = json.load(f)
+        except FileNotFoundError:
+            return "❌ No open dates found!"
+        
+        # Parse user date
+        try:
+            if len(user_date.split('-')) == 2:  # MM-DD format
+                current_year = datetime.now().year
+                user_date = f"{current_year}-{user_date}"
+            
+            parsed_date = datetime.strptime(user_date, '%Y-%m-%d')
+            date_key = parsed_date.strftime('%Y-%m-%d')
+            
+            if date_key in calendar_data:
+                if calendar_data[date_key]['blocked']:
+                    return f"❌ {calendar_data[date_key]['formatted']} is blocked."
+                else:
+                    return f"✅ {calendar_data[date_key]['formatted']} is available! Booking an appointment..."
+            else:
+                return f"❌ {user_date} is not in the current calendar range."
+        except ValueError:
+            return "❌ Invalid date format. Please use YYYY-MM-DD or MM-DD."
+
 
 
 
@@ -270,6 +322,16 @@ async def entrypoint(ctx: agents.JobContext, config: Dict[str, Any]):
                 _get_possible_issue_cause,
                 name="_get_possible_issue_cause",
                 description="Get a potential reason for the issue affecting the given product/service",
+            ),
+            function_tool(
+                _get_cost_and_time,
+                name="_get_cost_and_time",
+                description="Get the approximate time and money required to solve the issue",
+            ),
+            function_tool(
+                _check_date_availability,
+                name="_check_date_availability",
+                description="Book an appointment after checking for customer date availability",
             ),
         ],
     )

@@ -1,0 +1,58 @@
+{
+    "2025-06-25": {
+        "formatted": "Wednesday, June 25",
+        "blocked": false
+    },
+    "2025-06-26": {
+        "formatted": "Thursday, June 26",
+        "blocked": false
+    },
+    "2025-06-27": {
+        "formatted": "Friday, June 27",
+        "blocked": false
+    },
+    "2025-06-28": {
+        "formatted": "Saturday, June 28",
+        "blocked": true
+    },
+    "2025-06-29": {
+        "formatted": "Sunday, June 29",
+        "blocked": false
+    },
+    "2025-06-30": {
+        "formatted": "Monday, June 30",
+        "blocked": false
+    },
+    "2025-07-01": {
+        "formatted": "Tuesday, July 01",
+        "blocked": false
+    },
+    "2025-07-02": {
+        "formatted": "Wednesday, July 02",
+        "blocked": false
+    },
+    "2025-07-03": {
+        "formatted": "Thursday, July 03",
+        "blocked": false
+    },
+    "2025-07-04": {
+        "formatted": "Friday, July 04",
+        "blocked": false
+    },
+    "2025-07-05": {
+        "formatted": "Saturday, July 05",
+        "blocked": false
+    },
+    "2025-07-06": {
+        "formatted": "Sunday, July 06",
+        "blocked": false
+    },
+    "2025-07-07": {
+        "formatted": "Monday, July 07",
+        "blocked": true
+    },
+    "2025-07-08": {
+        "formatted": "Tuesday, July 08",
+        "blocked": true
+    }
+}

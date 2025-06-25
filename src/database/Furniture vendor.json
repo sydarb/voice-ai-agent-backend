@@ -1,0 +1,107 @@
+{
+    "Sofa": [
+        {
+            "issue": "Sagging or loss of shape",
+            "potential_reason": "Worn-out or compressed cushion fillings",
+            "solution": [
+                "Replace the cushion fillings with new, high-quality materials.",
+                "Consider adding a supportive foam core to the cushions.",
+                "Rotate and fluff the cushions regularly to maintain their shape."
+            ],
+            "repair_cost": 200,
+            "repair_time": "2-3 days"
+        },
+        {
+            "issue": "Fabric fading or discoloration",
+            "potential_reason": "Exposure to direct sunlight or harsh cleaning products",
+            "solution": [
+                "Rotate the sofa periodically to distribute sun exposure evenly.",
+                "Use mild, fabric-safe cleaners and avoid harsh chemicals.",
+                "Consider slipcovers or throws to protect the fabric from fading."
+            ],
+            "repair_cost": 50,
+            "repair_time": "1 day"
+        },
+        {
+            "issue": "Squeaky or noisy frame",
+            "potential_reason": "Loose joints or hardware",
+            "solution": [
+                "Tighten any loose screws, bolts, or other hardware.",
+                "Apply a small amount of furniture wax or lubricant to the joints.",
+                "If the issue persists, consider replacing worn-out hardware or reinforcing the frame."
+            ],
+            "repair_cost": 100,
+            "repair_time": "1-2 days"
+        }
+    ],
+    "Dining Table": [
+        {
+            "issue": "Wobbly or uneven legs",
+            "potential_reason": "Uneven floor or loose leg hardware",
+            "solution": [
+                "Check if the floor is level and use shims or furniture levelers to stabilize the table.",
+                "Tighten any loose screws or bolts securing the legs.",
+                "Replace damaged or worn-out leg hardware if necessary."
+            ],
+            "repair_cost": 75,
+            "repair_time": "1 day"
+        },
+        {
+            "issue": "Scratches or dents on the tabletop",
+            "potential_reason": "Improper use or accidental impact",
+            "solution": [
+                "Use placemats, coasters, and tablecloths to protect the surface.",
+                "Apply a furniture repair marker or touch-up kit to conceal minor scratches.",
+                "For deeper scratches or dents, consider professional refinishing or tabletop replacement."
+            ],
+            "repair_cost": 150,
+            "repair_time": "3-5 days"
+        },
+        {
+            "issue": "Warping or cupping of the tabletop",
+            "potential_reason": "Exposure to moisture or humidity changes",
+            "solution": [
+                "Maintain a consistent temperature and humidity level in the room.",
+                "Use coasters and placemats to protect the tabletop from moisture.",
+                "Consider applying a moisture-resistant sealant or finish to the tabletop."
+            ],
+            "repair_cost": 200,
+            "repair_time": "2-3 days"
+        }
+    ],
+    "Bed Frame": [
+        {
+            "issue": "Squeaking or creaking noises",
+            "potential_reason": "Loose joints or hardware",
+            "solution": [
+                "Tighten any loose bolts, screws, or other hardware.",
+                "Apply a small amount of furniture wax or lubricant to the joints.",
+                "Check for any worn-out or damaged parts and replace them if necessary."
+            ],
+            "repair_cost": 80,
+            "repair_time": "1 day"
+        },
+        {
+            "issue": "Mattress sagging or uneven support",
+            "potential_reason": "Worn-out or broken slats or support system",
+            "solution": [
+                "Replace any broken or damaged slats or support beams.",
+                "Consider adding a bunkie board or solid foundation for better mattress support.",
+                "Ensure the frame is properly assembled and level."
+            ],
+            "repair_cost": 150,
+            "repair_time": "2-3 days"
+        },
+        {
+            "issue": "Headboard or footboard becoming loose or detached",
+            "potential_reason": "Loose hardware or improper assembly",
+            "solution": [
+                "Tighten any loose screws, bolts, or other hardware securing the headboard or footboard.",
+                "Check the assembly instructions and ensure proper installation.",
+                "If necessary, disassemble and reassemble the components correctly."
+            ],
+            "repair_cost": 100,
+            "repair_time": "1-2 days"
+        }
+    ]
+}

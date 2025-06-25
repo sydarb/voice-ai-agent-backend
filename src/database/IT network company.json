@@ -1,0 +1,142 @@
+{
+    "Firewall": [
+        {
+            "issue": "Firewall rules are not being applied correctly",
+            "potential_reason": "Incorrect configuration or outdated rules",
+            "solution": [
+                "Review the firewall rules and ensure they are configured correctly",
+                "Update the rules to reflect the latest security requirements",
+                "Test the new rules in a non-production environment before applying them"
+            ],
+            "repair_cost": 500,
+            "repair_time": "2-4 hours"
+        },
+        {
+            "issue": "Firewall is causing network performance issues",
+            "potential_reason": "Outdated hardware or software, or misconfiguration",
+            "solution": [
+                "Check the firewall logs for any errors or warnings",
+                "Update the firewall software to the latest version",
+                "Consider upgrading the hardware if it is outdated"
+            ],
+            "repair_cost": 1000,
+            "repair_time": "4-8 hours"
+        },
+        {
+            "issue": "Firewall is not blocking malicious traffic effectively",
+            "potential_reason": "Inadequate security policies or outdated threat intelligence",
+            "solution": [
+                "Review and update the security policies to ensure they are comprehensive",
+                "Subscribe to threat intelligence feeds to stay up-to-date with the latest threats",
+                "Implement advanced security features like intrusion prevention and sandboxing"
+            ],
+            "repair_cost": 2000,
+            "repair_time": "8-16 hours"
+        }
+    ],
+    "VPN": [
+        {
+            "issue": "VPN connection is unstable or frequently drops",
+            "potential_reason": "Network congestion, firewall issues, or outdated VPN client",
+            "solution": [
+                "Check the network bandwidth and quality of service (QoS) settings",
+                "Review the firewall rules to ensure VPN traffic is allowed",
+                "Update the VPN client software to the latest version"
+            ],
+            "repair_cost": 300,
+            "repair_time": "2-4 hours"
+        },
+        {
+            "issue": "VPN performance is slow or laggy",
+            "potential_reason": "Insufficient bandwidth, outdated hardware, or encryption overhead",
+            "solution": [
+                "Increase the available bandwidth for VPN traffic",
+                "Consider upgrading the VPN hardware or server",
+                "Adjust the encryption settings to balance security and performance"
+            ],
+            "repair_cost": 800,
+            "repair_time": "4-8 hours"
+        },
+        {
+            "issue": "VPN access is being blocked or restricted",
+            "potential_reason": "Firewall rules, network policies, or geographic restrictions",
+            "solution": [
+                "Review the firewall rules and network policies to ensure VPN access is allowed",
+                "Consider implementing split-tunneling or other workarounds for geographic restrictions",
+                "Implement multi-factor authentication for enhanced security"
+            ],
+            "repair_cost": 1500,
+            "repair_time": "8-16 hours"
+        }
+    ],
+    "Network Switches": [
+        {
+            "issue": "Network switch is experiencing high latency or packet loss",
+            "potential_reason": "Misconfiguration, outdated firmware, or hardware issues",
+            "solution": [
+                "Review the switch configuration and ensure it is optimized for the network traffic",
+                "Update the switch firmware to the latest version",
+                "Check for any hardware issues, such as faulty ports or overheating"
+            ],
+            "repair_cost": 400,
+            "repair_time": "2-4 hours"
+        },
+        {
+            "issue": "Network switch is not forwarding traffic correctly",
+            "potential_reason": "Incorrect VLAN configuration, spanning tree issues, or routing problems",
+            "solution": [
+                "Verify the VLAN configuration and ensure it matches the network design",
+                "Check the spanning tree protocol (STP) settings and ensure they are consistent across the network",
+                "Review the routing configuration and ensure it is properly configured"
+            ],
+            "repair_cost": 800,
+            "repair_time": "4-8 hours"
+        },
+        {
+            "issue": "Network switch is experiencing security vulnerabilities",
+            "potential_reason": "Outdated firmware, weak passwords, or lack of security policies",
+            "solution": [
+                "Update the switch firmware to the latest version with security patches",
+                "Implement strong password policies and enable secure management access",
+                "Configure port security features and enable network access control (NAC)"
+            ],
+            "repair_cost": 1200,
+            "repair_time": "8-16 hours"
+        }
+    ],
+    "Wireless Access Points": [
+        {
+            "issue": "Wireless network coverage is poor or inconsistent",
+            "potential_reason": "Interference, physical obstructions, or inadequate access point placement",
+            "solution": [
+                "Perform a site survey to identify sources of interference and optimize access point placement",
+                "Adjust the wireless channel and power settings to minimize interference",
+                "Consider adding additional access points or using higher-gain antennas"
+            ],
+            "repair_cost": 500,
+            "repair_time": "4-8 hours"
+        },
+        {
+            "issue": "Wireless network performance is slow or unreliable",
+            "potential_reason": "Bandwidth limitations, outdated hardware, or excessive client load",
+            "solution": [
+                "Increase the available bandwidth for wireless traffic",
+                "Upgrade to newer access points with support for higher data rates and better client handling",
+                "Implement load balancing or band steering to distribute clients more efficiently"
+            ],
+            "repair_cost": 1000,
+            "repair_time": "8-16 hours"
+        },
+        {
+            "issue": "Wireless network security is compromised",
+            "potential_reason": "Weak encryption, outdated firmware, or rogue access points",
+            "solution": [
+                "Enable strong encryption (WPA2 or WPA3) and implement enterprise-grade authentication",
+                "Update the access point firmware to the latest version with security patches",
+                "Implement wireless intrusion detection and prevention systems (WIDS/WIPS)"
+            ],
+            "repair_cost": 1500,
+            "repair_time": "16-24 hours"
+        }
+    ]
+}
