@@ -4,7 +4,7 @@ import uuid
 import logging
 import asyncio
 from dataclasses import dataclass, field
-from typing import Optional, Dict, Any, AsyncIterable
+from typing import Optional, Dict, List, Any, AsyncIterable
 
 from livekit import rtc
 from livekit.agents import (
@@ -411,6 +411,15 @@ class SalesAgent(BaseAgent):
         # await self.session.say("Transferring you to customer service now.")
         return await self._transfer_to_agent("service", context)
 
+
+URLS = {
+    "chair": "https://cdn.decornation.in/wp-content/uploads/2020/07/modern-dining-table-chairs.jpg",
+    "table": "https://mywakeup.in/cdn/shop/files/iso_ae625879-0315-46cd-b978-9cb500fd1a32.png?v=1748581246&width=1214",
+    "service": "https://img.freepik.com/free-photo/delivery-concept-handsome-african-american-delivery-man-crossed-arms-isolated-grey-studio-background-copy-space_1258-1277.jpg?semt=ais_hybrid&w=740",
+
+}
+
+
 class ServiceAgent(BaseAgent):
     def __init__(
         self,
@@ -431,27 +440,115 @@ class ServiceAgent(BaseAgent):
             config=config,
             shared_state=shared_state
         )
+        db_path = f"./summy_db/product_db.json"
+        with open(db_path, "r") as f:
+            self.product_db = json.load(f)
+
 
     async def on_enter(self):
         await super().on_enter()
         self.session.generate_reply(user_input="hi", instructions="greet user by introducing yourself and asking how you can assist. use the context from the previous messages.")
 
-    # FIX: Replaced order tools with service-appropriate tools
-    @function_tool
-    async def get_order_history(self):
-        """Get the order history for the current customer."""
-        userdata: UserData = self.session.userdata
-        if not userdata.is_identified():
-            return "Please authenticate the customer first using the authenticate_user function."
-        return db.get_customer_order_history(userdata.first_name, userdata.last_name)
+    # --- NEW SERVICE TOOLS ---
 
     @function_tool
-    async def process_return(self, order_id: str, item_name: str, reason: str):
-        """Process a return for an item from a specific order."""
-        if not self.session.userdata.is_identified():
-            return "Please authenticate the customer first."
-        # In a real system, this would interact with the database
-        return f"Return processed for {item_name} from Order #{order_id}. Reason: {reason}."
+    async def get_user_products(self) -> str:
+        """
+        Retrieves the names and descriptions for all products currently rented by the user.
+        Call this when you need to know what items the user has, especially when they need to identify a product for a service request.
+        """
+        # In a real system, you would get the specific user's products.
+        # Here, we return all products from our dummy database.
+        products = [f"{name}: {details['description']}" for name, details in self.product_db.items()]
+        return json.dumps(products)
+
+    @function_tool
+    async def display_user_products(self, products: List[str]) -> str:
+        """
+        Displays a list of product names to the user so they can choose one.
+        Use this tool after you have matched a visual description to a few potential products from the get_user_products tool.
+        """
+        logger.info(f"!!! get_product_details called with: {products}")
+        
+        if not products:
+            return "I could not identify any specific products. Can you please provide the product name?"
+
+        # Dummy product data
+        all_products = {
+            "Product 1": {"title": "Product 1", "description": "This is a great product you should buy.", "imageUrl": URLS['table'], "actionUrl": "https://example.com/product1"},
+            "Product 2": {"title": "Product 2", "description": "This is another great product.", "imageUrl": URLS['chair'], "actionUrl": "https://example.com/product2"},
+            "Service A": {"title": "Service A", "description": "Our best service offering.", "imageUrl": URLS['service'], "actionUrl": "https://example.com/serviceA"},
+        }
+        
+        product_details = list(all_products.values())
+
+        if product_details:
+            self.shared_state["options"] = {
+                "type": "carousel",
+                "items": product_details
+            }
+            self.shared_state["display_options"] = True
+            
+        # The LLM will use this return string to formulate its response to the user.
+        return f"Successfully fetched details for the requested products and displayed to the user. "\
+                "Do not generate nay response, only just ask to 'choose any one from the provided options'"
+
+    @function_tool
+    async def select_option(self, index: int) -> str:
+        """
+        Confirms the user's numbered choice (by its 1-based index) from a list of options presented to the user.
+        Call this tool when the user has made a choice.
+        """
+        logger.info(f"!!! select_item called with: {index}")
+
+        if not isinstance(index, int) or index <= 0:
+            return "Please provide a valid choice (starting from 1)."
+    
+        zero_based_index = index - 1
+        self.shared_state["selected_option"] = zero_based_index
+        self.shared_state["select_option"] = True
+    
+        return f"Selected option number {index}."
+
+    @function_tool
+    async def get_product_known_issues(self, product_name: str) -> str:
+        """
+        Fetches a list of known issues and their potential solutions for a specific product.
+        Call this after the user has confirmed the product they are having trouble with.
+        """
+        product = self.product_db.get(product_name)
+        if not product:
+            return f"I could not find a product named '{product_name}' in the database."
+        return json.dumps(product['issues'])
+
+    @function_tool
+    async def check_for_warranty(self, product_name: str) -> bool:
+        """
+        Checks if the specified product is currently covered under the free repair warranty.
+        Returns True if it is under warranty, and False if it is not.
+        """
+        # Dummy logic: for simulation, we'll say all products are under warranty.
+        print(f"Checking warranty for {product_name}...")
+        return True
+
+    @function_tool
+    async def fetch_and_display_repair_slots(self) -> str:
+        """
+        Fetches and returns available time slots for a repair appointment.
+        Call this tool when a user wants to schedule a repair.
+        """
+        # Dummy slots for demonstration
+        return "We have the following slots available: Tomorrow at 10 AM, tomorrow at 2 PM, or Friday at 11 AM."
+
+    @function_tool
+    async def confirm_repair_slot(self, slot: str) -> str:
+        """
+        Confirms and books a repair appointment for the customer in the specified time slot.
+        """
+        # In a real system, this would write to a calendar or database.
+        return f"Excellent. Your repair appointment has been successfully scheduled for {slot}. You will receive a confirmation email shortly."
+
+    # --- TRANSFER TOOLS ---
 
     @function_tool
     async def transfer_to_sales(self, context: RunContext_T) -> Agent:

@@ -1,0 +1,114 @@
+{
+    "BILLY Bookcase": {
+      "name": "BILLY Bookcase",
+      "description": "A white 6-shelf bookcase with laminated plywood.",
+      "issues": [
+        {
+          "issue": "Shelves are sagging or bowing.",
+          "solution": "Redistribute the weight evenly across the shelves. If the issue persists, we can schedule a repair."
+        },
+        {
+          "issue": "Bookcase is unstable or wobbly.",
+          "solution": "Ensure all components are tightly secured and the unit is on a level floor. Use wall anchors for added stability if necessary."
+        }
+      ]
+    },
+    "POÄNG Armchair": {
+      "name": "POÄNG Armchair",
+      "description": "A bentwood armchair with a light-colored cushion.",
+      "issues": [
+        {
+          "issue": "Cushion cover is torn or stained.",
+          "solution": "We can schedule a replacement for the cushion cover. Would you like to proceed?"
+        },
+        {
+          "issue": "The wooden frame is creaking loudly.",
+          "solution": "First, try tightening all the bolts on the frame. If the creaking continues, a technician may need to inspect it."
+        }
+      ]
+    },
+    "LACK Coffee Table": {
+      "name": "LACK Coffee Table",
+      "description": "A black-brown, low-profile coffee table.",
+      "issues": [
+        {
+          "issue": "The table surface has deep scratches or chips.",
+          "solution": "For deep scratches, we can schedule a technician to perform a surface repair."
+        },
+        {
+          "issue": "One of the legs is loose.",
+          "solution": "Please try to re-tighten the leg. If it does not secure properly, it may need to be replaced."
+        }
+      ]
+    },
+    "MARKUS Office Chair": {
+      "name": "MARKUS Office Chair",
+      "description": "A high-back ergonomic office chair with black mesh.",
+      "issues": [
+        {
+          "issue": "The gas lift cylinder is failing (chair won't stay up).",
+          "solution": "The gas lift mechanism likely needs to be replaced. We can schedule a technician to do this for you."
+        },
+        {
+          "issue": "The caster wheels are stuck or not rolling smoothly.",
+          "solution": "Please check the wheels for tangled hair or debris. If cleaning them doesn't solve the issue, we can send you a replacement set of casters."
+        }
+      ]
+    },
+    "INGOLF Dining Chair": {
+      "name": "INGOLF Dining Chair",
+      "description": "A traditional solid wood dining chair in a white finish.",
+      "issues": [
+        {
+          "issue": "One or more legs are wobbly.",
+          "solution": "Try tightening the screws connecting the legs to the seat base. If a leg remains wobbly, the joint may be stripped and require repair."
+        },
+        {
+          "issue": "The paint is chipping or flaking.",
+          "solution": "For minor chips, we can provide a touch-up paint kit. For widespread flaking, we may need to replace the chair."
+        }
+      ]
+    },
+    "MALM Bed Frame": {
+      "name": "MALM Bed Frame",
+      "description": "A queen-sized bed frame with a simple, modern design.",
+      "issues": [
+        {
+          "issue": "The wooden slats are slipping out of place or have broken.",
+          "solution": "We can provide replacement slats and plastic end caps. Ensure the central support beam is secure to prevent recurring issues."
+        },
+        {
+          "issue": "The headboard feels loose or makes noise.",
+          "solution": "Please check and tighten the bolts connecting the headboard to the side rails. If the issue persists, a support bracket may be needed."
+        }
+      ]
+    },
+    "MICKE Desk": {
+      "name": "MICKE Desk",
+      "description": "A compact white desk with a drawer and a cabinet.",
+      "issues": [
+        {
+          "issue": "The drawer does not open or close smoothly.",
+          "solution": "Check that the drawer runners are correctly aligned and free of obstructions. Applying a small amount of lubricant can also help."
+        },
+        {
+          "issue": "The desk surface laminate is peeling at the edges.",
+          "solution": "This is considered wear and tear, but if it's significant, we can schedule a technician to assess it for repair or replacement."
+        }
+      ]
+    },
+    "KIVIK Sofa": {
+      "name": "KIVIK Sofa",
+      "description": "A 3-seat gray fabric sofa with deep, comfortable seating.",
+      "issues": [
+        {
+          "issue": "The seat cushions have lost their shape or feel flat.",
+          "solution": "Try fluffing and rotating the cushions regularly. If they are permanently compressed, we can look into replacing the foam inserts."
+        },
+        {
+          "issue": "The fabric cover is pilling or has faded.",
+          "solution": "Pilling can be removed with a fabric shaver. If the fading is severe and uneven, we can schedule a replacement for the sofa cover."
+        }
+      ]
+    }
+  }
