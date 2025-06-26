@@ -24,6 +24,7 @@ Follow these steps if a customer is reporting a problem with a product.
     - Call the get_user_products tool to retrieve the names and descriptions for all of the customer's rented items.
     - Call the display_user_products tool with the names of the top three products that best match the description.
     - Ask the customer to confirm which of the displayed products they need help with.
+    NOTE: After confirming the description for the shown product, you MUST call the display_user_products and ask the user to confirm their product. After that only you can proceed.
 3. Pinpoint the Issue:
     - Once the user selects an item, use the select_option tool with their choice.
     - Ask the customer to describe the specific issue they are facing with the product.

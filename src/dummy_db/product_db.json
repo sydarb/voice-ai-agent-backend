@@ -16,6 +16,7 @@
     "POÄNG Armchair": {
       "name": "POÄNG Armchair",
       "description": "A bentwood armchair with a light-colored cushion.",
+      "url": "https://www.ikea.com/in/en/images/products/poaeng-rocking-chair-brown-knisa-light-beige__0572148_pe667313_s5.jpg?f=xl",
       "issues": [
         {
           "issue": "Cushion cover is torn or stained.",
@@ -44,6 +45,7 @@
     "MARKUS Office Chair": {
       "name": "MARKUS Office Chair",
       "description": "A high-back ergonomic office chair with black mesh.",
+      "url": "https://www.godrejinterio.com/imagestore/B2C/56101522SD04105/56101522SD04105_01_1500x1500.jpg",
       "issues": [
         {
           "issue": "The gas lift cylinder is failing (chair won't stay up).",
@@ -58,6 +60,7 @@
     "INGOLF Dining Chair": {
       "name": "INGOLF Dining Chair",
       "description": "A traditional solid wood dining chair in a white finish.",
+      "url": "https://www.ikea.com/in/en/images/products/ingolf-junior-chair-antique-stain__0727933_pe735945_s5.jpg?f=xl",
       "issues": [
         {
           "issue": "One or more legs are wobbly.",
@@ -100,6 +103,7 @@
     "KIVIK Sofa": {
       "name": "KIVIK Sofa",
       "description": "A 3-seat gray fabric sofa with deep, comfortable seating.",
+      "url": "https://www.ikea.com/in/en/images/products/kivik-4-seat-sofa-with-chaise-longue-tibbleby-beige-grey__1056150_pe848283_s5.jpg?f=xl",
       "issues": [
         {
           "issue": "The seat cushions have lost their shape or feel flat.",
